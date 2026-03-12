@@ -8,14 +8,53 @@
 </head>
 <body>
     <div class="container">
+        <!-- Auth Section -->
+        <div id="auth-section" class="glass-card">
+            <h1>Taskly</h1>
+            <p class="subtitle">Your personal task manager</p>
+
+            <div class="tab-group">
+                <button id="login-tab" class="tab-btn active" type="button">Login</button>
+                <button id="register-tab" class="tab-btn" type="button">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required placeholder="Enter password">
+                </div>
+                <p id="login-error" class="error-msg"></p>
+                <button type="submit">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="hidden">
+                <div class="form-group">
+                    <label for="register-username">Username</label>
+                    <input type="text" id="register-username" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required placeholder="Choose a password">
+                </div>
+                <p id="register-error" class="error-msg"></p>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
         <!-- Dashboard Section -->
-        <div id="dashboard-section" class="glass-card">
+        <div id="dashboard-section" class="glass-card hidden">
             <div class="dashboard-header">
                 <div>
                     <h1 style="text-align: left; margin: 0;">Dashboard</h1>
-                    <p id="user-info" class="subtitle" style="text-align: left; margin: 0;">Loading user info...</p>
+                    <p id="user-info" class="subtitle" style="text-align: left; margin: 0;"></p>
                 </div>
-                <button class="btn-logout" onclick="window.location.href='/api/auth/logout'" id="logout-btn">Logout</button>
+                <button class="btn-logout" id="logout-btn" type="button">Logout</button>
             </div>
 
             <!-- Task Form -->
@@ -27,17 +66,13 @@
                 <button type="submit">Add Task</button>
             </form>
 
-            <ul id="task-list" class="task-list">
-                <!-- Tasks injected here -->
-            </ul>
+            <ul id="task-list" class="task-list"></ul>
 
             <!-- Admin Section -->
             <div id="admin-section" class="hidden">
                 <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--glass-border);">
                 <h2>Admin Management</h2>
-                <ul id="user-list" class="user-list">
-                    <!-- Users injected here -->
-                </ul>
+                <ul id="user-list" class="user-list"></ul>
             </div>
         </div>
     </div>

@@ -13,11 +13,12 @@ const JWT_SECRET = process.env.APP_JWT_SECRET || 'fallback_secret';
 
 // Database Setup
 const sequelize = new Sequelize(
-    process.env.DB_NAME || 'taskdb',
-    process.env.DB_USER || 'root',
-    process.env.DB_PASSWORD || 'rootpassword',
+    process.env.DB_NAME ,
+    process.env.DB_USER ,
+    process.env.DB_PASSWORD ,
     {
-        host: process.env.DB_HOST || 'localhost',
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT || 3306,
         dialect: 'mysql',
         logging: false
     }
@@ -44,11 +45,33 @@ async function initDb() {
     try {
         await sequelize.authenticate();
         console.log('Database connected.');
-        await sequelize.sync({ alter: true }); // Sync models to DB
+        await sequelize.sync({ alter: true });
         console.log('Database schema synchronized.');
+        await seedDb();
     } catch (err) {
         console.error('Database connection failed:', err.message);
     }
+}
+
+async function seedDb() {
+    const count = await User.count();
+    if (count > 0) return;
+
+    const adminPwd = await bcrypt.hash('admin123', 10);
+    const userPwd  = await bcrypt.hash('alice123', 10);
+
+    const admin = await User.create({ username: 'admin', password: adminPwd, role: 'admin' });
+    const alice = await User.create({ username: 'alice', password: userPwd,  role: 'user' });
+
+    await Task.bulkCreate([
+        { title: 'Review pull requests',    description: 'Check open PRs on GitHub',         completed: false, userId: admin.id },
+        { title: 'Update documentation',    description: 'Keep the README up to date',       completed: false, userId: admin.id },
+        { title: 'Buy groceries',           description: 'Milk, eggs, bread',                completed: false, userId: alice.id },
+        { title: 'Go for a run',            description: '30-minute jog in the park',        completed: false, userId: alice.id },
+        { title: 'Learn Express routing',   description: 'Finish the middleware chapter',    completed: true,  userId: alice.id },
+    ]);
+
+    console.log('Database seeded — admin:admin123  alice:alice123');
 }
 
 initDb();
@@ -77,15 +100,11 @@ const authorizeAdmin = (req, res, next) => {
 
 // --- ROUTES ---
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Task App API (MySQL)' });
-});
-
 app.post('/api/auth/register', async (req, res) => {
     try {
-        const { username, password, role } = req.body;
+        const { username, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        await User.create({ username, password: hashedPassword, role: role === 'admin' ? 'admin' : 'user' });
+        await User.create({ username, password: hashedPassword, role: 'user' });
         res.status(201).json({ message: 'User registered.' });
     } catch (err) {
         res.status(400).json({ error: 'User registration failed (possibly exists).' });
@@ -123,6 +142,17 @@ app.post('/api/tasks', authenticateToken, async (req, res) => {
         res.status(201).json(task);
     } catch (err) {
         res.status(400).json({ error: 'Task creation failed.' });
+    }
+});
+
+app.delete('/api/tasks/:id', authenticateToken, async (req, res) => {
+    try {
+        const task = await Task.findOne({ where: { id: req.params.id, userId: req.user.id } });
+        if (!task) return res.status(404).json({ error: 'Task not found.' });
+        await task.destroy();
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to delete task.' });
     }
 });
 

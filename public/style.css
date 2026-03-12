@@ -149,6 +149,26 @@ button:hover {
 .badge-admin { background: rgba(239, 68, 68, 0.2); color: #f87171; }
 .badge-user { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
 
+.btn-delete {
+    width: auto;
+    margin: 0;
+    padding: 0.25rem 0.6rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.btn-delete:hover {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.4);
+    transform: none;
+}
+
 .nav-links {
     margin-top: 1.5rem;
     text-align: center;
@@ -179,4 +199,45 @@ button:hover {
 .btn-logout:hover {
     background: #ef4444;
     color: white;
+}
+
+/* Auth tabs */
+.tab-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+    flex: 1;
+    margin-top: 0;
+    padding: 0.6rem;
+    background: rgba(15, 23, 42, 0.4);
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+    border-radius: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--text-main);
+    transform: none;
+}
+
+.tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* Error message */
+.error-msg {
+    color: #f87171;
+    font-size: 0.85rem;
+    min-height: 1.2rem;
+    margin-bottom: 0.25rem;
+    text-align: center;
 }
