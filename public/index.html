@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly | Task Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" class="glass-card">
+            <div class="dashboard-header">
+                <div>
+                    <h1 style="text-align: left; margin: 0;">Dashboard</h1>
+                    <p id="user-info" class="subtitle" style="text-align: left; margin: 0;">Loading user info...</p>
+                </div>
+                <button class="btn-logout" onclick="window.location.href='/api/auth/logout'" id="logout-btn">Logout</button>
+            </div>
+
+            <!-- Task Form -->
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="task-title">New Task</label>
+                    <input type="text" id="task-title" required placeholder="What needs to be done?">
+                </div>
+                <button type="submit">Add Task</button>
+            </form>
+
+            <ul id="task-list" class="task-list">
+                <!-- Tasks injected here -->
+            </ul>
+
+            <!-- Admin Section -->
+            <div id="admin-section" class="hidden">
+                <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--glass-border);">
+                <h2>Admin Management</h2>
+                <ul id="user-list" class="user-list">
+                    <!-- Users injected here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
